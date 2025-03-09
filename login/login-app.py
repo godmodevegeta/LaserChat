@@ -10,6 +10,8 @@ def hello_login():
 
 # signup api
 
+# logout api
+
 if __name__ == "__main__":
     app.run(debug=True, port=8001)
 
