@@ -1,6 +1,11 @@
-from flask import Flask, request
+from flask import Flask, request, jsonify
+import json
+# from model import LoginBody
+import helper
 
 app = Flask(__name__)
+
+# user database - temporary
 
 @app.route("/")
 def hello_login():
@@ -28,11 +33,33 @@ def login():
 @app.route("/api/v1/signup", methods=['GET', 'POST'])
 def signup():
     if request.method == 'GET':
-        return 'hi, GET'
+        return jsonify({'message': 'This is a GET request. Please use POST and send appropriate body'}), 200
     elif request.method == 'POST':
-        return 'hi, POST'
+        users = helper.load_temp_db()
+        data = request.get_json()
+        
+        # Validate required fields
+        valid_body = helper.validate_signup_body(data)
+        if not valid_body[0]: return jsonify({'error': f'Missing field {valid_body[1]} in body'}), 400
+        
+        # Check if username or email already exists
+        user_exists = helper.check_if_user_already_exists(users, data)
+        if not user_exists[0]: return jsonify({'error': f'{user_exists[1]} already exists'}), 400
 
-    
+        # Create new user
+        new_user = {
+            'email': data['email'],
+            'username': data['username'],
+            'password': data['password']
+        }
+
+        # Add user
+        users.append(new_user)
+
+        # Persist user in file
+        helper.write_temp_db(users)
+
+        return jsonify({'message': 'User created successfully'}), 201
 
 # logout api
 # - Define a route for logout (e.g., /logout)
