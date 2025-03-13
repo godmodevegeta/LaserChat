@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, redirect, url_for
 import json
 # from model import LoginBody
 import helper
@@ -21,8 +21,21 @@ def login():
     if request.method == 'GET':
         return 'hi, GET'
     elif request.method == 'POST':
-        return 'hi, POST'
+        data = request.get_json()
+        users = helper.load_temp_db()
 
+        # Validate login body
+        valid_body = helper.validate_login_body(data)
+        if not valid_body[0]: return jsonify({'error': f'Missing field {valid_body[1]} in body'}), 400
+
+        # Check if username exists
+        user_exists = helper.check_if_user_already_exists(users, data)
+        if user_exists[0]: # if username already exists
+            user_password_check = helper.check_user_password(data)
+            if user_password_check: return jsonify({'message': 'User logged in successfully'}), 200
+            else: return jsonify({'message': 'User logged in successfully'}), 200
+        else: # if username doesnt exist
+            return jsonify({'error': 'Username does not exist'}), 404
 
 # signup api
 # - Define a route for signup (e.g., /signup)
@@ -33,7 +46,7 @@ def login():
 @app.route("/api/v1/signup", methods=['GET', 'POST'])
 def signup():
     if request.method == 'GET':
-        return jsonify({'message': 'This is a GET request. Please use POST and send appropriate body'}), 200
+        return jsonify({'message': 'This is a GET request. Please use POST and send appropriate body'}), 405
     elif request.method == 'POST':
         users = helper.load_temp_db()
         data = request.get_json()
@@ -44,7 +57,7 @@ def signup():
         
         # Check if username or email already exists
         user_exists = helper.check_if_user_already_exists(users, data)
-        if not user_exists[0]: return jsonify({'error': f'{user_exists[1]} already exists'}), 400
+        if user_exists[0]: return jsonify({'error': f'{user_exists[1]} already exists'}), 400
 
         # Create new user
         new_user = {
