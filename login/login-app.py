@@ -33,7 +33,7 @@ def login():
         if user_exists[0]: # if username already exists
             user_password_check = helper.check_user_password(data)
             if user_password_check: return jsonify({'message': 'User logged in successfully'}), 200
-            else: return jsonify({'message': 'User logged in successfully'}), 200
+            return jsonify({'error': 'Incorrect password. Please try again.'}), 401
         else: # if username doesnt exist
             return jsonify({'error': 'Username does not exist'}), 404
 
@@ -63,7 +63,7 @@ def signup():
         new_user = {
             'email': data['email'],
             'username': data['username'],
-            'password': data['password']
+            'password': helper.hash_password(data['password'])
         }
 
         # Add user
