@@ -1,5 +1,6 @@
 import json
 from typing import Optional
+import hashlib
 
 def load_temp_db() -> list[dict]:
     with open('users.json') as f:
@@ -34,9 +35,14 @@ def validate_login_body(data: dict) -> list[bool, str]:
 
 def check_user_password(data: dict) -> bool:
     request_username = data.get('username')
-    request_password = data.get('password')
+    request_password = hash_password(data.get('password'))
     users = load_temp_db()
     for user in users:
         if user.get('username') == request_username:
             return user.get('password') == request_password
         
+def hash_password(password: str) -> str:
+    # Create a sha256 hash object from the password
+    hash_object = hashlib.sha256(password.encode())
+    # Convert the hash to a hexadecimal string and return it
+    return hash_object.hexdigest()    
