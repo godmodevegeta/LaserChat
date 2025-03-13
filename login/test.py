@@ -1,4 +1,5 @@
 import json
+import helper
 
 # with open('users.json') as f:
 #     users = json.load(f)
@@ -7,7 +8,7 @@ import json
 
 user = {
         "email": "cat@gmail.com",
-        "username": "cat_1234",
+        "username": "c1at_1234",
         "password": "Cat@1234"
     }
 
@@ -17,3 +18,8 @@ user = {
 #     json.dump(users, f)
 
 # print(users)
+
+users = helper.load_temp_db()
+data = user
+valid_user = helper.check_if_user_already_exists(users, data)
+print(valid_user)
