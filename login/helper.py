@@ -21,11 +21,22 @@ def validate_signup_body(data: Optional[dict]) -> list[bool, str]:
 def check_if_user_already_exists(users: list[dict], data: dict) -> list[bool, str]:
     for user in users:
         if user.get('username') == data.get('username'):
-            return [False, 'Username']
+            return [True, 'Username']
         if user.get('email') == data.get('email'):
-            return [False, 'Email']
+            return [True, 'Email']
+    return [False]
+
+def validate_login_body(data: dict) -> list[bool, str]:
+    for key in ['username', 'password']:
+        if key not in list(data.keys()):
+            return [False, key]
     return [True]
 
-
-
+def check_user_password(data: dict) -> bool:
+    request_username = data.get('username')
+    request_password = data.get('password')
+    users = load_temp_db()
+    for user in users:
+        if user.get('username') == request_username:
+            return user.get('password') == request_password
         
