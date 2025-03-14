@@ -33,7 +33,7 @@ def login():
             user_password_check = helper.check_user_password(data)
             if user_password_check: 
                 token = helper.generate_jwt_token(username)
-                return jsonify({'message': f'User {username} logged in successfully', 'token': token}), 200
+                return jsonify({'message': f'User [{username}] logged in successfully', 'token': token}), 200
             return jsonify({'error': 'Incorrect password. Please try again.'}), 401
         else: # if username doesn't exist
             return jsonify({'error': 'Username does not exist'}), 400
