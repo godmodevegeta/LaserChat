@@ -5,8 +5,6 @@ import helper
 
 app = Flask(__name__)
 
-# user database - temporary
-
 @app.route("/")
 def hello_login():
     return "<p>Hello, Login!</p>"
@@ -19,7 +17,7 @@ def hello_login():
 @app.route("/api/v1/login", methods=['GET', 'POST'])
 def login():
     if request.method == 'GET':
-        return 'hi, GET'
+        return jsonify({'message': 'This is a GET request. Please use POST and send appropriate body to login'}), 405
     elif request.method == 'POST':
         data = request.get_json()
         users = helper.load_temp_db()
@@ -31,11 +29,14 @@ def login():
         # Check if username exists
         user_exists = helper.check_if_user_already_exists(users, data)
         if user_exists[0]: # if username already exists
+            username = user_exists[2]
             user_password_check = helper.check_user_password(data)
-            if user_password_check: return jsonify({'message': 'User logged in successfully'}), 200
+            if user_password_check: 
+                token = helper.generate_jwt_token(username)
+                return jsonify({'message': f'User {username} logged in successfully', 'token': token}), 200
             return jsonify({'error': 'Incorrect password. Please try again.'}), 401
-        else: # if username doesnt exist
-            return jsonify({'error': 'Username does not exist'}), 404
+        else: # if username doesn't exist
+            return jsonify({'error': 'Username does not exist'}), 400
 
 # signup api
 # - Define a route for signup (e.g., /signup)
@@ -46,7 +47,7 @@ def login():
 @app.route("/api/v1/signup", methods=['GET', 'POST'])
 def signup():
     if request.method == 'GET':
-        return jsonify({'message': 'This is a GET request. Please use POST and send appropriate body'}), 405
+        return jsonify({'message': 'This is a GET request. Please use POST and send appropriate body to signup'}), 405
     elif request.method == 'POST':
         users = helper.load_temp_db()
         data = request.get_json()
@@ -57,17 +58,10 @@ def signup():
         
         # Check if username or email already exists
         user_exists = helper.check_if_user_already_exists(users, data)
-        if user_exists[0]: return jsonify({'error': f'{user_exists[1]} already exists'}), 400
+        if user_exists[0]: return jsonify({'error': f'{user_exists[1]} [{user_exists[2]}] already exists'}), 400
 
-        # Create new user
-        new_user = {
-            'email': data['email'],
-            'username': data['username'],
-            'password': helper.hash_password(data['password'])
-        }
-
-        # Add user
-        users.append(new_user)
+        # Add new user to users
+        users = helper.add_new_user(users, data)
 
         # Persist user in file
         helper.write_temp_db(users)
