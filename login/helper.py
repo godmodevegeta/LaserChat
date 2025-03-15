@@ -2,6 +2,7 @@ import json
 from typing import Optional
 import hashlib
 import datetime
+from datetime import timezone
 import jwt
 from dotenv import dotenv_values
 
@@ -68,12 +69,15 @@ def hash_password(password: str) -> str:
     return hash_object.hexdigest()    
 
 def generate_jwt_token(username: str) -> str:
+    payload = {
+        "username": username,
+        "exp": datetime.datetime.now(tz=timezone.utc) + datetime.timedelta(hours=1),
+        "iat": datetime.datetime.now(tz=timezone.utc)
+    }
     token = jwt.encode(
-        {
-            'username': username,
-            'expiry': (datetime.datetime.now() + datetime.timedelta(hours=1)).isoformat()
-        }, 
+        payload, 
         SECRET_JWT_KEY, 
         algorithm=SECRET_JWT_ALGORITHM
     )
     return token
+
