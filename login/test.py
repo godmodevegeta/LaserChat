@@ -2,7 +2,7 @@ import json
 import helper
 from functools import wraps
 import datetime
-
+import jwt
 
 # with open('users.json') as f:
 #     users = json.load(f)
@@ -45,4 +45,9 @@ user = {
 
 # summer(2,2,2)
 
-print(datetime.datetime.now().isoformat)
+token = helper.generate_jwt_token("shubham")
+# token = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNodWJoYW0iLCJleHAiOjE3NDIwMTU1Mzl9.zul-tZpyU1TTy89v8KbTS5-lsQebFqdeEk8yQVobw3Q'
+print(token)
+
+decoded = helper.decode_jwt_token(token)
+print((decoded))
