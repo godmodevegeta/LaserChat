@@ -6,7 +6,9 @@ app = Flask(__name__)
 config = dotenv_values(".env")
 
 AUTH_SERVICE_URL = config.get('AUTH_SERVICE_URL')
+AUTH_VALIDATION_PATH = config.get('AUTH_VALIDATION_PATH')
 CHAT_SERVICE_URL = config.get('CHAT_SERVICE_URL')
+CHAT_MESSAGE_PATH = config.get('CHAT_MESSAGE_PATH')
 
 @app.before_request
 def authenticate_request():
@@ -26,18 +28,19 @@ def authenticate_request():
 def message():
     """ Forwards request to the CHAT Microservice """
     headers = {"Authorization": request.headers.get("Authorization")}
-    response = requests.post(f"{CHAT_SERVICE_URL}/api/v1/message", headers=headers)
+    response = requests.post(f"{CHAT_SERVICE_URL}{CHAT_MESSAGE_PATH}", headers=headers)
     return jsonify(response.json()), response.status_code
     
 
 def validate_jwt(token: str):
     """SENDS jwt to AUTH service for validation"""
     response = requests.post(
-        f'{AUTH_SERVICE_URL}/validate', 
+        f'{AUTH_SERVICE_URL}{AUTH_VALIDATION_PATH}', 
         data={
             'token': token
             }
         )
+    
     return response if response.status_code==200 else None
 
 
