@@ -106,9 +106,10 @@ def signup():
         return jsonify({'message': 'User created successfully'}), 201
     
 # validate jwt api
-@app.route('/validate', methods=['POST'])
+@app.route('/api/v1/validate', methods=['POST'])
 def validate_token():
-    token = request.json.get("token")  # Expecting JSON payload: { "token": "JWT_TOKEN" }
+    token = request.get_json().get("token")  # Expecting JSON payload: { "token": "JWT_TOKEN" }
+
     if not token:
         return jsonify({"message": "Token is missing!"}), 401
     
