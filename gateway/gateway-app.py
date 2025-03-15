@@ -16,13 +16,17 @@ def authenticate_request():
         if not validation_response:
             return jsonify({'message': 'Invalid or expired token'}), 401
         request.user = validation_response.json()
+        # print (request.user)
 
 
 @app.route('/api/v1/message', methods=['POST'])
 def message():
     """ Forwards request to the CHAT Microservice """
-    print("preparing to contact CHAT")
-    headers = {"Authorization": request.headers.get("Authorization")}
+    print("______Preparing to contact CHAT______")
+    headers = {
+        "Authorization": request.headers.get("Authorization"),
+        "UserID": request.user.get('user')
+        }
     response = helper.create_response(headers)
     return response.json(), response.status_code
     

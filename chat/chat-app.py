@@ -1,4 +1,5 @@
-from flask import Flask, jsonify
+from flask import Flask, jsonify, request
+import helper
 
 app = Flask(__name__)
 
@@ -9,8 +10,9 @@ def hello_chat():
 
 @app.route("/api/v1/message", methods=['POST'])
 def hello_message():
+    userID = request.headers.get('UserID')
     return jsonify({
-        'message': "Welcome to CHAT!!!!"
+        'message': f"Welcome to CHAT, {userID}!!!!"
     })
 
 

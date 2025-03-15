@@ -2,3 +2,9 @@ curl -X POST http://127.0.0.1:8003/api/v1/message \
 -H "Content-Type: application/json" \
 -H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImRhbl8xMjM0IiwiZXhwIjoxNzQyMDI4NjExLCJpYXQiOjE3NDIwMjUwMTF9.iqK6xdjfArG73-HMmnW4bi8BVkMfP0n3gnUXqxTxsEg" \
 -d '{"username":"shivam1904", "password":"hello@1234"}'
+
+
+curl -X POST http://127.0.0.1:8003/api/v1/message \
+-H "Content-Type: application/json" \
+-H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImV2YV8xMjM0IiwiZXhwIjoxNzQyMDMxMjMxLCJpYXQiOjE3NDIwMjc2MzF9.9KljEAiqMo1wVmNUXXyuhp9F9ZO5jYkrS1Ccox6rdIQ" \
+-d '{"username":"shivam1904", "password":"hello@1234"}'
