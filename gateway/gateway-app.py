@@ -1,14 +1,8 @@
 from flask import Flask, request, jsonify
 import requests
-from dotenv import dotenv_values
+import helper
 
 app = Flask(__name__)
-config = dotenv_values(".env")
-
-AUTH_SERVICE_URL = config.get('AUTH_SERVICE_URL')
-AUTH_VALIDATION_PATH = config.get('AUTH_VALIDATION_PATH')
-CHAT_SERVICE_URL = config.get('CHAT_SERVICE_URL')
-CHAT_MESSAGE_PATH = config.get('CHAT_MESSAGE_PATH')
 
 @app.before_request
 def authenticate_request():
@@ -18,7 +12,7 @@ def authenticate_request():
         if not token:
             return jsonify({'message': 'Token is missing'}), 401
         token = token.split(" ")[1] # Remove Bearer
-        validation_response = validate_jwt(token)
+        validation_response = helper.validate_jwt(token)
         if not validation_response:
             return jsonify({'message': 'Invalid or expired token'}), 401
         request.user = validation_response.json()
@@ -27,21 +21,11 @@ def authenticate_request():
 @app.route('/api/v1/message', methods=['POST'])
 def message():
     """ Forwards request to the CHAT Microservice """
+    print("preparing to contact CHAT")
     headers = {"Authorization": request.headers.get("Authorization")}
-    response = requests.post(f"{CHAT_SERVICE_URL}{CHAT_MESSAGE_PATH}", headers=headers)
-    return jsonify(response.json()), response.status_code
+    response = helper.create_response(headers)
+    return response.json(), response.status_code
     
-
-def validate_jwt(token: str):
-    """SENDS jwt to AUTH service for validation"""
-    response = requests.post(
-        f'{AUTH_SERVICE_URL}{AUTH_VALIDATION_PATH}', 
-        data={
-            'token': token
-            }
-        )
-    
-    return response if response.status_code==200 else None
 
 
 if __name__=='__main__':
