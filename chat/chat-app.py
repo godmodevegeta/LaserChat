@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, jsonify
 
 app = Flask(__name__)
 
@@ -7,9 +7,11 @@ def hello_chat():
     return "<p>Hello, Chat!</p>"
 
 
-@app.route("/api/v1/message")
+@app.route("/api/v1/message", methods=['POST'])
 def hello_message():
-    return "<p>Hello, Message!</p>"
+    return jsonify({
+        'message': "Welcome to CHAT!!!!"
+    })
 
 
 if __name__ == "__main__":
