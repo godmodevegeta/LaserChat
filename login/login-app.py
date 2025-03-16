@@ -1,6 +1,7 @@
 from flask import Flask, request, jsonify
 import helper
 import jwt
+import logging
 
 """
 This module implements a Flask-based API for user authentication including login, signup, 
@@ -41,6 +42,12 @@ Note:
 """
 
 app = Flask(__name__)
+
+logger = logging.basicConfig(
+    format="{asctime} - {levelname} - {message}",
+    style="{",
+    datefmt="%Y-%m-%d %H:%M",
+)
 
 @app.route("/")
 def hello_login():

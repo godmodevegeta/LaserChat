@@ -3,3 +3,4 @@ __pycache__
 curl_commands.txt
 users.json
 test.py
+run-auth.sh

@@ -6,5 +6,5 @@ curl -X POST http://127.0.0.1:8003/api/v1/message \
 
 curl -X POST http://127.0.0.1:8003/api/v1/message \
 -H "Content-Type: application/json" \
--H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6ImV2YV8xMjM0IiwiZXhwIjoxNzQyMDMxMjMxLCJpYXQiOjE3NDIwMjc2MzF9.9KljEAiqMo1wVmNUXXyuhp9F9ZO5jYkrS1Ccox6rdIQ" \
+-H "Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InNoaXZhbTE5MDQiLCJleHAiOjE3NDIwMzM2NDAsImlhdCI6MTc0MjAzMDA0MH0.1EBM9PtalY6Gs0kkt1dNoqfp-aIf4HPC_k7bJ1C32M8" \
 -d '{"username":"shivam1904", "password":"hello@1234"}'
