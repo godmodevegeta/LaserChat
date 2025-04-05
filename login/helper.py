@@ -10,14 +10,15 @@ from dotenv import dotenv_values
 config = dotenv_values('.env')
 SECRET_JWT_KEY = config.get('SECRET_JWT_KEY')
 SECRET_JWT_ALGORITHM = config.get('SECRET_JWT_ALGORITHM')
+TEMP_DB = config.get('TEMP_DB')
 
 def load_temp_db() -> list[dict]:
-    with open('users.json') as f:
+    with open(TEMP_DB) as f:
         users = json.load(f)
     return users
 
 def write_temp_db(users: list) -> None:
-    with open('users.json', 'w') as f:
+    with open(TEMP_DB, 'w') as f:
         json.dump(users, f)
 
 def add_new_user(users: list[dict], user: dict) -> list[dict]:

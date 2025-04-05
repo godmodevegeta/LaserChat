@@ -1,1 +1,4 @@
+run-auth.sh
+run-gateway.sh
+run-chat.sh
 .env

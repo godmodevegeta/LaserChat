@@ -1,7 +1,14 @@
 from flask import Flask, jsonify, request
 import helper
+import logging
 
 app = Flask(__name__)
+
+logger = logging.basicConfig(
+    format="{asctime} - {levelname} - {message}",
+    style="{",
+    datefmt="%Y-%m-%d %H:%M",
+)
 
 @app.route("/")
 def hello_chat():

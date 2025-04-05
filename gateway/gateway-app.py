@@ -1,8 +1,15 @@
 from flask import Flask, request, jsonify
 import requests
 import helper
+import logging
 
 app = Flask(__name__)
+
+logger = logging.basicConfig(
+    format="{asctime} - {levelname} - {message}",
+    style="{",
+    datefmt="%Y-%m-%d %H:%M",
+)
 
 @app.before_request
 def authenticate_request():
